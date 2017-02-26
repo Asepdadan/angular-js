@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html ng-app="crud">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Title Page</title>
+
+	</head>
+	<body ng-controller="productController">
+
+		<table cellpadding="5" border="1">
+			<caption>table title and/or explanatory text</caption>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Nama</th>
+					<th>Harga</th>
+					<th>Stok</th>
+					<th>Aksi</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="r in listProducts | orderBy : id">
+					<td>{{r.id}}</td>
+					<td>{{r.nama}}</td>
+					<td>{{r.harga}}</td>
+					<td>{{r.stok}}</td>
+					<td colspan="2">
+						<a href="#" ng-click="del(r.id)">hapus</a>
+						<a href="#" ng-click="selectEdit(r.id)">edit</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<h3>Product Information</h3>
+		<table>
+			<tr>
+				<th>Id</th>
+				<td><input type="text"  ng-model="id"></td>
+			</tr>
+			<tr>
+				<th>Nama</th>
+				<td><input type="text"  ng-model="nama"></td>
+			</tr>
+			<tr>
+				<th>Harga</th>
+				<td><input type="text"  ng-model="harga"></td>
+			</tr>
+			<tr>
+				<th>Stok</th>
+				<td><input type="text"  ng-model="stok"></td>
+			</tr>
+			<tr>
+				<th>&nsp</th>
+				<td><input type="button" value="Tambah" ng-click="tambah()">
+				<input type="button" value="Edit" ng-click="edit()">
+				</td>
+			</tr>
+		</table>
+		
+
+ 		<script src="../js/angular.js"></script>
+ 		<script>
+ 			//module
+ 			var crud = angular.module('crud',[]);
+ 			//controller
+ 			crud.controller('productController',function($scope){
+ 				$scope.listProducts = [
+ 				{id : 1, nama : "produk 1", harga : 2000, stok : 30},
+ 				{id : 3, nama : "produk 2", harga : 4000, stok : 10}, 
+ 				{id : 5, nama : "produk 3", harga : 6000, stok : 20},
+ 				{id : 6, nama : "produk 4", harga : 2000, stok : 15},
+ 				{id : 2, nama : "produk 5", harga : 1000, stok : 30},
+ 				];
+
+ 				// function hapus
+ 				$scope.del = function(id){
+ 					var result = confirm("apakah anda yakin?")
+
+ 					if(result === true){
+ 						var index = getSelectedIndex(id);
+ 						$scope.listProducts.splice(index, 1)	
+ 					}
+ 					
+ 				}
+
+ 				// select array ke
+ 				function getSelectedIndex(id){
+ 					for(var i=0; i<$scope.listProducts.length; i++)
+ 						if($scope.listProducts[i].id==id)
+ 							return i;
+ 						return -1;
+ 				}
+
+ 				// function menampilkan ke form
+ 				$scope.selectEdit = function(id){
+ 					var index = getSelectedIndex(id);
+ 					var product = $scope.listProducts[index];
+
+ 					$scope.id = product.id;
+ 					$scope.nama = product.nama;
+ 					$scope.harga = product.harga;
+ 					$scope.stok = product.stok;
+
+ 				}
+
+ 				//function menambah data
+ 				$scope.tambah = function(){
+ 					$scope.listProducts.push({
+ 						id : $scope.id,
+ 						nama : $scope.nama,
+ 						harga : $scope.harga,
+ 						stok : $scope.stok,
+
+ 					});
+ 					$scope.id = "";
+ 					$scope.nama = "";
+ 					$scope.harga = "";
+ 					$scope.stok = "";
+ 				}
+
+ 				// function merubah data
+ 				$scope.edit = function(){
+ 					var index = getSelectedIndex($scope.id);
+ 					$scope.listProducts[index].nama = $scope.nama;
+ 					$scope.listProducts[index].harga = $scope.harga;
+ 					$scope.listProducts[index].stok = $scope.stok;
+
+ 				}
+
+ 			});
+ 		</script>
+	</body>
+</html>

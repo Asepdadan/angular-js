@@ -1,0 +1,8 @@
+<input type="text" ng-model="pencarian" class="form-control" placeholder="pencarian">
+<div >
+	<ul>
+		<li ng-repeat="r in mahasiswa | filter : pencarian | orderBy : 'nama'">
+			{{r.nama}}
+		</li>
+	</ul>
+</div>

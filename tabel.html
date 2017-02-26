@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+	<head>
+		
+		<title>Tabel mahasiswa</title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<script src="js/angular.js"></script>
+		<script src="js/app.js"></script>
+	</head>
+	<body ng-controller="myCtrl">
+	<div  class="container">
+		<h1 class="text-center">Tabel Mahasiswa</h1>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="btn-group" role="group">
+					<button ng-click="changeAction(p)" type="button" ng-repeat="p in pagesizes" class="btn btn-default">{{p}}</button>
+				</div>	
+			</div>
+
+			<div class="col-md-4 pull-right">
+				<div class="input-group">
+					<span class="input-group-addon" ><i class="glyphicon glyphicon-search"></i></span>
+					<input type="search" ng-model="q" placeholder="cari mahasiswa" class="form-control" >
+				</div>
+			</div>
+		</div>
+		<p>
+			
+		</p>
+		<p>
+			<select ng-model="pagesize" ng-options="opt as opt for opt in pagesizes">
+			</select>
+		<!-- 	<label>halaman{{currentpage + 1}} dari {{pagenumber}}</label> -->
+		</p>
+		<br>
+		<table border="1" class="table table-bordered">
+			<thead>
+				<tr>
+					<th><a href="" ng-click="booolnama = ordering(booolnama, 'nama')">Nama</a></th>
+					<th><a href="" ng-click="boolkelas = ordering(boolkelas, 'kelas')">Kelas</a></th>
+					<th><a href="" ng-click="boolnilai = ordering(boolnilai, 'nilai')">Nilai</a></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="row in (result = (mahasiswa | filter:q | orderBy:ord:ordstatus))" ng-if="$index >= (currentpage * pagesize) && $index < (currentpage+1 * pagesize)">
+					<td>{{row.nama}}</td>
+					<td>{{row.kelas}}</td>
+					<td>{{row.nilai}}</td>
+				</tr>
+
+				<tr ng-if="result.length == 0">
+					<td colspan="3">hasil tidak ditemukan</td>
+				</tr>
+			</tbody>
+		</table>
+		<!-- <span>{{result.length}} of {{mahasiswa.length}}</span> -->
+
+		<br>
+		<div class="row text-center">
+			<nav aria-label="Page navigation">
+			  <ul class="pagination">
+			    <li>
+			      <a href="#" aria-label="Previous">
+			        <span aria-hidden="true">&laquo;</span>
+			      </a>
+			    </li>
+			    <li><a href="#">1</a></li>
+			    <li><a href="#">2</a></li>
+			    <li><a href="#">3</a></li>
+			    <li><a href="#">4</a></li>
+			    <li><a href="#">5</a></li>
+			    <li>
+			      <a href="#" aria-label="Next">
+			        <span aria-hidden="true">&raquo;</span>
+			      </a>
+			    </li>
+			  </ul>
+			</nav>
+		</div>
+		<div class="row text-center">
+				<label>halaman{{currentpage + 1}} dari {{pagenumber}}</label>
+		</div>
+		<br>
+			<!-- <button ng-click="currentpage=0">pertama</button>
+			<button ng-click="paging(0)">sebelumnya</button>
+			<button ng-click="paging(1)">selanjutnya</button>
+			<button ng-clikc="currentpage=pagenumber-1">terakhir</button> -->
+
+	</div>
+	</body>
+</html>

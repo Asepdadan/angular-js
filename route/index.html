@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html ng-app="appRoute">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Title Page</title>
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+		<script src="../js/angular.js" type="text/javascript"></script>
+		<script src="../js/angular-route.js" type="text/javascript"></script>
+
+	</head>
+	<body>
+	<div class="container">
+		<div header-title></div>
+
+		<div ng-view></div>
+
+		<div part-title></div>
+	</div>
+		<script>
+			var app = angular.module('appRoute',['ngRoute']);
+
+			app.factory('factoryMahasiswa', function($http){
+
+				var factoryMahasiswa = {};
+
+				factoryMahasiswa.getMahasiswa = function(){
+					return $http.get("getData.php");
+				}
+
+				factoryMahasiswa.addMahasiswa = function(datas){
+					return $http.post("add.php",datas);
+				}
+
+				return factoryMahasiswa;
+			})
+
+
+			app.directive('headerTitle',function(){
+				return {
+					restrict : 'A',
+					templateUrl : 'header.html'
+				}
+			});
+
+			app.directive('partTitle',function(){
+				return {
+					restrict : 'A',
+					templateUrl : 'part.html',
+					//controller : function($scope,$http){
+					controller : function($scope,factoryMahasiswa){
+
+				 //$scope.mahasiswa = 
+				 // [
+					// 				{nama : "Asep dadan",kelas : "MIF-R45/3"},
+					// 				{nama : "Asdan",kelas : "MIF-R45/3"},
+					// 				{nama : "sajidin", kelas : "MIF-R45/3"},
+					// 				{nama : "Rohaeti",kelas : "MIF-R45/3"},
+					// 				{nama : "Dina Khanza",kelas : "MIF-R45/3"}
+					// 				];
+
+					factoryMahasiswa.getMahasiswa().then(function(hasil){
+						$scope.mahasiswa = hasil.data;						
+					});
+
+
+
+					// bisa ini
+					//get("url")
+					//  
+						// $http({
+						//   method: 'GET',
+						//   url: 'http://localhost/latihan/route/getData.php'
+						// }).then(function successCallback(response) {
+						//     $scope.mahasiswa = response.data;
+						//   }, function errorCallback(response) {
+						//     $scope.mahasiswa = response.data;
+						//   });
+
+					}
+				};
+			});
+
+
+			// syarat route link nya memakai(/#!/) http://localhost/latihan/#!/diikutilink yg di config
+			app.config(function($routeProvider) {
+				
+				$routeProvider
+				.when('/tambah',{
+					templateUrl : 'input.html'
+				})
+				.when('/kontak',{
+					templateUrl : 'kontak.html'
+				})
+				.otherwise({redirectTo: '/'});
+			});
+
+			app.controller('ctrlTambah',function($scope,$http,factoryMahasiswa){
+				
+				
+				$scope.cek = function(){
+					alert($scope.select);
+				}
+
+
+
+				$scope.alert = function(){
+					//alert($scope.databaru.nama);
+					databaru = {
+						nama : $scope.databaru.nama,
+						kelas : $scope.databaru.kelas
+					};
+
+					factoryMahasiswa.addMahasiswa(databaru).then(function(hasil){
+						$scope.mahasiswa.push({
+							nama : $scope.databaru.nama,
+							kelas : $scope.databaru.kelas
+						});
+
+						$scope.databaru.nama = "";
+						$scope.databaru.kelas = "";
+
+						//alert(hasil.databaru.nama);
+						console.log(hasil);
+
+					});
+				}
+				
+
+			});
+
+		
+			
+
+		</script>
+	</body>
+</html>
